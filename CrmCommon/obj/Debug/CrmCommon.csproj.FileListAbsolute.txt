@@ -1,0 +1,17 @@
+C:\Temp3\CrmCommon\bin\Debug\CrmCommon.dll
+C:\Temp3\CrmCommon\bin\Debug\CrmCommon.pdb
+C:\Temp3\CrmCommon\bin\Debug\ManagedClient.dll
+C:\Temp3\CrmCommon\bin\Debug\Antlr4.Runtime.net35.dll
+C:\Temp3\CrmCommon\bin\Debug\Antlr4.Runtime.net35.xml
+C:\Temp3\CrmCommon\bin\Debug\ManagedClient.pdb
+C:\Temp3\CrmCommon\obj\Debug\ResolveAssemblyReference.cache
+C:\Temp3\CrmCommon\obj\Debug\CrmCommon.dll
+C:\Temp3\CrmCommon\obj\Debug\CrmCommon.pdb
+D:\GatewayIrbis\CrmCommon\bin\Debug\CrmCommon.dll
+D:\GatewayIrbis\CrmCommon\bin\Debug\CrmCommon.pdb
+D:\GatewayIrbis\CrmCommon\bin\Debug\ManagedClient.dll
+D:\GatewayIrbis\CrmCommon\bin\Debug\Antlr4.Runtime.net35.dll
+D:\GatewayIrbis\CrmCommon\bin\Debug\ManagedClient.pdb
+D:\GatewayIrbis\CrmCommon\obj\Debug\CrmCommon.csprojResolveAssemblyReference.cache
+D:\GatewayIrbis\CrmCommon\obj\Debug\CrmCommon.dll
+D:\GatewayIrbis\CrmCommon\obj\Debug\CrmCommon.pdb

@@ -12,30 +12,45 @@ namespace MainClass
 {
     class Program
     {
-        /*static DbDataRecord Select(NpgsqlConnection npgSqlConnection, string number)
+        /*static DbDataRecord Select(NpgsqlConnection npgSqlConnection, IrbisRecord record)
         {
-            NpgsqlCommand npgSqlCommand = new NpgsqlCommand("SELECT * FROM users WHERE number = @number", npgSqlConnection);
+            int mfn = record.Mfn;
+
+            NpgsqlCommand npgSqlCommand = new NpgsqlCommand("SELECT * FROM main WHERE mfn = @mfn", npgSqlConnection);
+
+            NpgsqlParameter npgSqlParameterMfn = new NpgsqlParameter("@mfn", NpgsqlTypes.NpgsqlDbType.Integer);
+
+            npgSqlParameterMfn.Value = mfn;
+
+            npgSqlCommand.Parameters.AddRange(new NpgsqlParameter[] { npgSqlParameterMfn });
+
             NpgsqlDataReader npgSqlDataReader = npgSqlCommand.ExecuteReader();
             if (npgSqlDataReader.HasRows)
             {
-                Console.WriteLine("Таблица: books");
-                Console.WriteLine("id     name      author");
+                int count = 0;
                 foreach (DbDataRecord dbDataRecord in npgSqlDataReader)
-                    return dbDataRecord;
-                    //Console.WriteLine(dbDataRecord["id"] + "   " + dbDataRecord["name"] + "   " + dbDataRecord["author"]);
+                {
+                    count++;
+                    if (count != 1)
+                        Console.WriteLine(dbDataRecord["id"]);
+                }
+                    //return dbDataRecord;
+                    
             }
             else
             {
                 Console.WriteLine("Запрос не вернул строк");
+                Console.WriteLine(mfn);
             }
             return null;
         }*/
-        static bool Insert(NpgsqlConnection npgSqlConnection, IrbisRecord record)
+        static void Insert(NpgsqlConnection npgSqlConnection, IrbisRecord record)
         {
             //main
 
-            NpgsqlCommand npgSqlCommandMain = new NpgsqlCommand("INSERT INTO main(surname, name, middle_name, date_birth, id_reader, library_card_number, gender, citizenship, number_student_card, passport_data, home_phone, registered_to, job, post, education, note, right_to_use, reader_photos, name_worksheet) VALUES (@surname, @name, @middle_name, @date_birth, @id_reader, @library_card_number, @gender, @citizenship, @number_student_card, @passport_data, @home_phone, @registered_to, @job, @post, @education, @note, @right_to_use, @reader_photos, @name_worksheet) returning id", npgSqlConnection);
+            NpgsqlCommand npgSqlCommandMain = new NpgsqlCommand("INSERT INTO main(mfn, surname, name, middle_name, date_birth, id_reader, library_card_number, gender, citizenship, number_student_card, passport_data, home_phone, registered_to, job, post, education, note, right_to_use, reader_photos, name_worksheet) VALUES (@mfn, @surname, @name, @middle_name, @date_birth, @id_reader, @library_card_number, @gender, @citizenship, @number_student_card, @passport_data, @home_phone, @registered_to, @job, @post, @education, @note, @right_to_use, @reader_photos, @name_worksheet) returning id", npgSqlConnection);
 
+            int mfn = record.Mfn;
             string surname = record.FM("10");
             string name = record.FM("11");
             string middle_name = record.FM("12");
@@ -56,6 +71,7 @@ namespace MainClass
             string reader_photos = record.FM("950");
             string name_worksheet = record.FM("920");
 
+            NpgsqlParameter npgSqlParameterMfn = new NpgsqlParameter("@mfn", NpgsqlTypes.NpgsqlDbType.Integer);
             NpgsqlParameter npgSqlParameterSurname = new NpgsqlParameter("@surname", NpgsqlTypes.NpgsqlDbType.Varchar);
             NpgsqlParameter npgSqlParameterName = new NpgsqlParameter("@name", NpgsqlTypes.NpgsqlDbType.Varchar);
             NpgsqlParameter npgSqlParameterMiddle_name = new NpgsqlParameter("@middle_name", NpgsqlTypes.NpgsqlDbType.Varchar);
@@ -76,6 +92,7 @@ namespace MainClass
             NpgsqlParameter npgSqlParameterReader_photos = new NpgsqlParameter("@reader_photos", NpgsqlTypes.NpgsqlDbType.Varchar);
             NpgsqlParameter npgSqlParameterName_worksheet = new NpgsqlParameter("@name_worksheet", NpgsqlTypes.NpgsqlDbType.Varchar);
 
+            npgSqlParameterMfn.Value = mfn;
             npgSqlParameterSurname.Value = surname;
             npgSqlParameterName.Value = name;
             npgSqlParameterMiddle_name.Value = middle_name;
@@ -96,7 +113,7 @@ namespace MainClass
             npgSqlParameterReader_photos.Value = reader_photos;
             npgSqlParameterName_worksheet.Value = name_worksheet;
 
-            npgSqlCommandMain.Parameters.AddRange(new NpgsqlParameter[] { npgSqlParameterSurname, npgSqlParameterName, npgSqlParameterMiddle_name, npgSqlParameterDate_birth, npgSqlParameterID_reader, npgSqlParameterLibrary_card_number, npgSqlParameterGender, npgSqlParameterCitizenship, npgSqlParameterNumber_student_card, npgSqlParameterPassport_data, npgSqlParameterHome_phone, npgSqlParameterRegistered_to, npgSqlParameterJob, npgSqlParameterPost, npgSqlParameterEducation, npgSqlParameterNote, npgSqlParameterRight_to_use, npgSqlParameterReader_photos, npgSqlParameterName_worksheet });
+            npgSqlCommandMain.Parameters.AddRange(new NpgsqlParameter[] { npgSqlParameterMfn, npgSqlParameterSurname, npgSqlParameterName, npgSqlParameterMiddle_name, npgSqlParameterDate_birth, npgSqlParameterID_reader, npgSqlParameterLibrary_card_number, npgSqlParameterGender, npgSqlParameterCitizenship, npgSqlParameterNumber_student_card, npgSqlParameterPassport_data, npgSqlParameterHome_phone, npgSqlParameterRegistered_to, npgSqlParameterJob, npgSqlParameterPost, npgSqlParameterEducation, npgSqlParameterNote, npgSqlParameterRight_to_use, npgSqlParameterReader_photos, npgSqlParameterName_worksheet });
             NpgsqlDataReader reader = npgSqlCommandMain.ExecuteReader();
 
             int id = 0;
@@ -809,15 +826,14 @@ namespace MainClass
                 int count = npgSqlCommandEdit_record.ExecuteNonQuery();
             }
 
-            return true;
         }
         private static void Main(string[] args)
         {
             try
             {
                 Console.WriteLine("Postgresql connect");
-                //String connectionString = "Server=localhost;Port=5432;User=postgres;Password='';Database=work;";
-                String connectionString = "Server=192.168.28.17;Port=5432;User=postgres;Password='123test123';Database=work;";
+                String connectionString = "Server=localhost;Port=5432;User=postgres;Password='';Database=work;";
+                //String connectionString = "Server=192.168.28.17;Port=5432;User=postgres;Password='123test123';Database=work;";
                 NpgsqlConnection npgSqlConnection = new NpgsqlConnection(connectionString);
                 npgSqlConnection.Open();
                 Console.WriteLine("Postgresql connected");
@@ -865,6 +881,8 @@ namespace MainClass
                 {
                     IrbisRecord record = irbisConnect.ReadRecord(foundRecords[i]);
                     Insert(npgSqlConnection, record);
+                    //Select(npgSqlConnection, record);
+                    //Console.WriteLine(record.Mfn);
                 }
 
 
